@@ -1,16 +1,29 @@
 // TODO: add code here
 window.addEventListener("load", function() {
-    this.fetch("https://handlers.education.launchcode.org/static/astronauts.json").then(function(response) {
-        response.json().then(function(json) {
-            const div = document.getElementById("container");
-            div.innerHTML = `
-            <h3> ${json[0].firstName} ${json[0].lastName} </h3>
-            <img src=${json[0].picture} height=250</img>
-                <ul>
-                    <li>Hours in Space: ${json[0].hoursInSpace}</li>
-                    <li>Active: ${json[0].active}</li>
-                    <li>Skills: ${json[0].skills}</li>
-                </ul>`
+    this.fetch("https://handlers.education.launchcode.org/static/astronauts.json")
+    .then(function(response) {
+        let jsonPromise = response.json();
+
+        jsonPromise.then(function(json) {
+
+            let container = document.getElementById("container");
+            for (astronaut of json) {
+                let astronautHTML = `
+                <div class="astronaut">
+                    <div class="bio">
+                        <h3>${astronaut.firstName} ${astronaut.lastName}</h3>
+                        <ul>
+                            <li>Hours in space: ${astronaut.hoursInSpace}</li>
+                            <li>Active: ${astronaut.active}</li>
+                            <li>Skills: ${astronaut.skills.join(", ")}</li>
+                        </ul>
+                    </div>
+                <img class="avatar" src="${astronaut.picture}"></img>
+            </div>
+            `
+                container.innerHTML += astronautHTML;
+            }
+        });
         });
     });
-});
+// });
